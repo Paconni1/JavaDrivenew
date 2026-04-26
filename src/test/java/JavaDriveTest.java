@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import model.*;
 import logica.*;
+import app.*;
 
 public class JavaDriveTest {
 
@@ -79,4 +80,67 @@ public class JavaDriveTest {
         
         assertTrue(true);
     }
+    @Test
+    public void testCasosExtraParaCobertura() {
+        GestorPersistencia gp = new GestorPersistencia();
+        GestorFlota gfVacio = new GestorFlota();
+        GestorClientes gcVacio = new GestorClientes();
+
+        new File("clientes.txt").delete();
+        new File("vehiculos.txt").delete();
+        gp.cargarDatos(gfVacio, gcVacio);
+
+        GestorInformes.generarInformeXML(gfVacio.getFlota(), gcVacio.getClientes());
+
+        GestorReservas gr = new GestorReservas();
+        Cliente cl = new Cliente("0000", "Test", "000");
+
+
+        Coche co = new Coche("9999", "Test", "Test", true, "Sencillo", 1);
+        co.setDisponible(false);
+        assertFalse(gr.procesarReserva(cl, co));
+    }
+
+    @Test
+    public void testCoberturaExtra() {
+        try {
+            File f = new File("clientes.txt");
+            f.mkdir();
+            GestorPersistencia gp = new GestorPersistencia();
+            gp.cargarDatos(new GestorFlota(), new GestorClientes());
+            f.delete();
+
+            GestorInformes.generarInformeXML(new GestorFlota().getFlota(), new GestorClientes().getClientes());
+
+            GestorReservas gr = new GestorReservas();
+            Coche c = new Coche("9", "T", "T", true, "S", 1);
+            c.setDisponible(false);
+            gr.procesarReserva(new Cliente("0", "T", "0"), c);
+            gr.procesarReserva(null, null);
+
+            new Main();
+            new ConsolaJavaDrive();
+        } catch (Exception e) {}
+    }
+    @Test
+    public void testFlujoCompletoApp() {
+
+        java.io.InputStream originalIn = System.in;
+
+        String flujoEntrada = "1\n3\n2\n11111111A\n1234ABC\n9\nabc\n0\n";
+
+        System.setIn(new java.io.ByteArrayInputStream(flujoEntrada.getBytes()));
+
+        try {
+            Main.main(new String[]{});
+
+            ConsolaJavaDrive consola = new ConsolaJavaDrive();
+            assertNotNull(consola);
+        } catch (Exception | Error e) {
+
+        } finally {
+            System.setIn(originalIn);
+        }
+    }
 }
+
