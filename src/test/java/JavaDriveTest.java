@@ -10,6 +10,11 @@ import model.*;
 import logica.*;
 import app.*;
 
+/**
+ * @author XxAntoniOxX
+ * @author Fran
+ * @author Dario
+ */
 public class JavaDriveTest {
 
     @Test
@@ -142,5 +147,22 @@ public class JavaDriveTest {
             System.setIn(originalIn);
         }
     }
+    @Test
+    public void testReservaErrorEscritura() {
+        GestorReservas gr = new GestorReservas();
+        Cliente cl = new Cliente("11111111A", "Antonio", "600111222");
+        Coche co = new Coche("ERROR", "Test", "Test", true, "S", 1);
+
+        File carpetaFalsa = new File("ticket_ERROR.txt");
+        carpetaFalsa.mkdir();
+
+        try {
+            boolean resultado = gr.procesarReserva(cl, co);
+            assertFalse(resultado);
+        } finally {
+            carpetaFalsa.delete();
+        }
+    }
 }
+
 
