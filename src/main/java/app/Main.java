@@ -7,8 +7,9 @@ package app;
 
 
 /**
- *
- * @author anton
+ * @author XxAntoniOxX
+ * @author Fran
+ * @author Dario
  */
 public class Main {
     public static void main(String[] args) {
